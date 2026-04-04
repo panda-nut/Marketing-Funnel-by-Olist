@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>python导入SQL面经</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --paper: rgba(255, 255, 255, 0.92);
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --line: #dfd4c5;
+      --accent: #b45309;
+      --accent-soft: #fff4e6;
+      --code-bg: #fbf7f1;
+      --shadow: 0 22px 70px rgba(86, 63, 36, 0.14);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 48px 20px;
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+      line-height: 1.8;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.78), transparent 32%),
+        linear-gradient(180deg, #f7f2ea 0%, var(--bg) 100%);
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 44px 52px;
+      background: var(--paper);
+      border: 1px solid rgba(223, 212, 197, 0.9);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    h1, h2, h3 {
+      line-height: 1.3;
+      margin-top: 1.7em;
+      margin-bottom: 0.7em;
+      color: #1b1b1b;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 16px;
+      font-size: 2rem;
+      border-bottom: 2px solid var(--line);
+      letter-spacing: 0.01em;
+    }
+    h2 {
+      font-size: 1.45rem;
+      padding-left: 14px;
+      border-left: 5px solid var(--accent);
+    }
+    h3 {
+      font-size: 1.15rem;
+    }
+    p {
+      margin: 0.85em 0;
+    }
+    strong {
+      color: #111827;
+    }
+    ul, ol {
+      margin: 0.85em 0 1.1em;
+      padding-left: 1.45em;
+    }
+    li {
+      margin: 0.4em 0;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(180, 83, 9, 0.25);
+    }
+    a:hover {
+      border-bottom-color: var(--accent);
+    }
+    pre, .codehilite {
+      background: var(--code-bg);
+      padding: 16px 18px;
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid #eadfce;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    code {
+      padding: 0.15em 0.4em;
+      background: var(--accent-soft);
+      border-radius: 6px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    pre code, .codehilite code {
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+    }
+    blockquote {
+      margin: 1.2em 0;
+      padding: 0.8em 1em;
+      color: var(--muted);
+      background: #fffaf3;
+      border-left: 4px solid #d6b58b;
+      border-radius: 0 12px 12px 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1.2em 0;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #fffdfa;
+      border: 1px solid #eadfce;
+    }
+    th, td {
+      border: 1px solid #eee4d8;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background: #f8eedf;
+      color: #5b3a12;
+    }
+    hr {
+      border: none;
+      height: 1px;
+      margin: 2em 0;
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+    }
+    ::selection {
+      background: #fde2b6;
+    }
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 12px;
+      }
+      main {
+        padding: 28px 20px;
+        border-radius: 18px;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      main {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: #fff;
+      }
+      a {
+        color: inherit;
+        border-bottom: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+<h1 id="1">1. 整个数据导入流程</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>你怎么把 CSV 导入 MySQL？</li>
+<li>为什么不用手工导入，而是用 Python？</li>
+<li>整个流程分几步？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<p><code>CSV -&gt; DataFrame -&gt; MySQL 表</code></p>
+<ol>
+<li>先用 Python 的 <code>pandas.read_csv()</code> 读取 CSV 文件，得到 <code>DataFrame</code>。</li>
+<li>再用 <code>SQLAlchemy + pymysql</code> 连接 MySQL。</li>
+<li>最后用 <code>df.to_sql()</code> 把 <code>DataFrame</code> 写入 MySQL 的目标表。</li>
+</ol>
+<p>如果数据量比较大，还可以加上分块读取、字段清洗、类型转换和异常处理。</p>
+<h1 id="2-csvdataframemysql">2. CSV、DataFrame、MySQL 三者的关系</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li><code>read_csv()</code> 之后的数据存到哪里？</li>
+<li><code>to_sql()</code> 做了什么？</li>
+<li>CSV 和数据库表有什么区别？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<ul>
+<li>CSV 是磁盘上的文本文件。</li>
+<li>DataFrame 是 Python 内存中的表格对象。</li>
+<li>MySQL 表是数据库中的持久化存储结构。</li>
+</ul>
+<p>可以这样理解：</p>
+<ul>
+<li><code>read_csv()</code> 是把磁盘上的 CSV 解析后读入内存，变成 <code>DataFrame</code>。</li>
+<li><code>to_sql()</code> 是把内存中的 <code>DataFrame</code> 再写入数据库表。</li>
+</ul>
+<p>从内存角度看：</p>
+<ul>
+<li>CSV 本身是文本文件，占用的是磁盘空间。</li>
+<li>读入后会变成内存中的 <code>DataFrame</code>，通常比原始 CSV 更占内存，因为还包含索引、对象引用和类型开销。</li>
+<li>执行 <code>to_sql()</code> 时，<code>DataFrame</code> 仍在内存中，同时 Python 和 MySQL 还可能有批量写入缓冲，因此导入时的峰值内存通常会高于 <code>DataFrame</code> 本身。</li>
+<li>如果文件很大，可以使用 <code>chunksize</code> 分块读取或分批写入，控制内存峰值。</li>
+</ul>
+<h1 id="3">3. 为什么要先建立数据库</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>为什么要先 <code>CREATE DATABASE</code>？</li>
+<li>不建数据库可以直接导入吗？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<p>不能直接“随意导入”，因为 MySQL 中的表必须属于某个数据库。<br />
+所以通常要先创建数据库，再连接到该数据库后导入表。</p>
+<h1 id="4-to_sql">4. <code>to_sql()</code> 的常见参数</h1>
+<p>示例：</p>
+<pre class="codehilite"><code class="language-python">df.to_sql(&quot;accounts&quot;, con=engine, if_exists=&quot;replace&quot;, index=False)
+</code></pre>
+
+<p>常见参数说明：</p>
+<ul>
+<li><code>if_exists="replace"</code>：如果表已存在，就先删表再重建。</li>
+<li><code>if_exists="fail"</code>：如果表已存在，就直接报错。</li>
+<li><code>if_exists="append"</code>：向已有表追加数据。</li>
+</ul>
+<p><code>index=False</code> 的含义：</p>
+<p>DataFrame 默认有索引列，但这个索引通常不是原始业务数据的一部分。<br />
+导入 MySQL 时一般不希望把默认索引也写成一列，所以通常设为 <code>False</code>。</p>
+<h1 id="5-python-sql">5. 为什么 Python 比纯 SQL 导入更适合</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>为什么不用 <code>LOAD DATA INFILE</code>？</li>
+<li>为什么选择用 Python 导入？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<p>如果只是导入单个、规则比较统一的小 CSV，<code>LOAD DATA INFILE</code> 或 <code>LOAD DATA LOCAL INFILE</code> 确实可能更高效。<br />
+但如果面对多个文件，或者导入前还要做清洗、重命名、类型转换、缺失值处理、异常处理和自动化流程控制，那么 Python 会更灵活。</p>
+<p>可以概括为：</p>
+<ul>
+<li>SQL 导入更偏向高性能、直接入库。</li>
+<li>Python 导入更偏向灵活处理和自动化。</li>
+</ul>
+<p>关于 <code>LOCAL INFILE</code> 的常见问题：</p>
+<ul>
+<li>可能受到服务端配置、客户端配置、用户权限等限制。</li>
+<li>有时还会受到 <code>secure-file-priv</code> 等安全策略影响。</li>
+<li>路径也更容易出问题，比如客户端和服务端对文件位置的理解不同，或者 Windows 路径、中文路径、绝对路径写法不一致。</li>
+</ul>
+<h1 id="6">6. 数据类型映射</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>CSV 的字段类型怎么变成 MySQL 的字段类型？</li>
+<li><code>to_sql()</code> 会自动建表吗？</li>
+<li>自动推断类型会有问题吗？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<p><code>to_sql()</code> 可以自动建表，并根据 <code>DataFrame</code> 的列类型推断 MySQL 字段类型。<br />
+但自动推断不一定总是最优，尤其是日期、金额、布尔值、长文本这类字段，实际项目里常常会：</p>
+<ul>
+<li>先手动清洗和转换类型；</li>
+<li>手动指定字段类型；</li>
+<li>或者先手动建表，再把数据写进去。</li>
+</ul>
+<h1 id="7">7. 日期字段怎么处理</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>CSV 里的日期字段怎么导入？</li>
+<li>如果原始数据里是字符串格式日期怎么办？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<p>可以在 <code>read_csv()</code> 之后先用 pandas 做日期转换，比如 <code>pd.to_datetime()</code>，再写入 MySQL。<br />
+否则日期字段可能会被当成普通字符串存入数据库。</p>
+<h1 id="8">8. 缺失值的处理</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>CSV 中有空值怎么办？</li>
+<li>MySQL 中会怎么存？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<p>pandas 读取 CSV 后，缺失值通常会表现为 <code>NaN</code>。<br />
+写入 MySQL 时，一般会转换为 <code>NULL</code>。<br />
+正式导入前，最好先确认关键字段是否允许为空；如果不允许，就要提前清洗或填补。</p>
+<h1 id="9">9. 导入后如何验证数据是否正确</h1>
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>导入后怎么确认表建成功了？</li>
+<li>怎么确认数据没有少？</li>
+<li>怎么快速抽查内容？</li>
+</ul>
+<p><strong>标准回答：</strong></p>
+<ul>
+<li><code>SHOW TABLES;</code> 查看表是否创建成功。</li>
+<li><code>SELECT COUNT(*) FROM 表名;</code> 对比 CSV 行数。</li>
+<li><code>SELECT * FROM 表名 LIMIT 10;</code> 抽样检查数据内容。</li>
+</ul>
+  </main>
+</body>
+</html>
