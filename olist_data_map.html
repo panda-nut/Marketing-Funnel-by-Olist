@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olist 数据地图</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --blue: #dbeafe;
+      --green: #dcfce7;
+      --yellow: #fef3c7;
+      --pink: #fce7f3;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    p { margin: 0 0 12px; }
+    .subtitle { color: var(--muted); margin-bottom: 24px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .group-a { background: linear-gradient(180deg, #eef6ff, #ffffff); }
+    .group-b { background: linear-gradient(180deg, #effdf5, #ffffff); }
+    .group-c { background: linear-gradient(180deg, #fff8e8, #ffffff); }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .badge.a { background: var(--blue); }
+    .badge.b { background: var(--green); }
+    .badge.c { background: var(--yellow); }
+    ul { margin: 8px 0 0 18px; padding: 0; }
+    li { margin-bottom: 6px; }
+    .diagram {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+      overflow-x: auto;
+    }
+    .diagram-inner {
+      min-width: 980px;
+      display: grid;
+      grid-template-columns: 200px 70px 220px 70px 220px 70px 200px;
+      grid-template-rows: auto 38px auto 38px auto;
+      align-items: center;
+      justify-items: center;
+    }
+    .node {
+      width: 100%;
+      padding: 14px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .node.blue { background: #eff6ff; }
+    .node.green { background: #f0fdf4; }
+    .node.yellow { background: #fffbeb; }
+    .node.pink { background: #fdf2f8; }
+    .arrow {
+      font-size: 22px;
+      color: #4b5563;
+      font-weight: 700;
+    }
+    .down {
+      font-size: 22px;
+      color: #4b5563;
+      font-weight: 700;
+      transform: translateY(-2px);
+    }
+    .legend {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: none; }
+    .connections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .conn {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Olist 数据地图</h1>
+    <p class="subtitle">把 11 张表先看成“分组 + 主链路 + 核心连接”的结构图，而不是零散的表名集合。</p>
+
+    <h2>一、11 张表的分组总览</h2>
+    <div class="grid">
+      <section class="card group-a">
+        <div class="badge a">A 组｜订单主链路</div>
+        <h3>最先掌握</h3>
+        <ul>
+          <li><code>olist_orders_dataset</code>：订单主表</li>
+          <li><code>olist_order_items_dataset</code>：订单商品明细</li>
+          <li><code>olist_order_payments_dataset</code>：支付明细</li>
+          <li><code>olist_order_reviews_dataset</code>：评价明细</li>
+          <li><code>olist_customers_dataset</code>：客户维度</li>
+          <li><code>olist_products_dataset</code>：商品维度</li>
+          <li><code>olist_sellers_dataset</code>：卖家维度</li>
+        </ul>
+        <p><strong>这一组的作用：</strong>回答订单发生了什么、买了什么、花了多少钱、评价如何、谁买的、谁卖的。</p>
+      </section>
+
+      <section class="card group-b">
+        <div class="badge b">B 组｜辅助维度</div>
+        <h3>第二批掌握</h3>
+        <ul>
+          <li><code>product_category_name_translation</code>：品类翻译表</li>
+          <li><code>olist_geolocation_dataset</code>：地理位置表</li>
+        </ul>
+        <p><strong>这一组的作用：</strong>增强解释力，让品类更可读，后续支持州、市、邮编前缀、经纬度等地理分析。</p>
+      </section>
+
+      <section class="card group-c">
+        <div class="badge c">C 组｜扩展业务</div>
+        <h3>先知道，不急着用</h3>
+        <ul>
+          <li><code>olist_marketing_qualified_leads_dataset</code>：营销线索</li>
+          <li><code>olist_closed_deals_dataset</code>：成交线索 / 成交单</li>
+        </ul>
+        <p><strong>这一组的作用：</strong>描述销售漏斗世界，和订单履约主链路分开理解更清晰。</p>
+      </section>
+    </div>
+
+    <h2>二、主链路图</h2>
+    <div class="diagram">
+      <div class="diagram-inner">
+        <div class="node green" style="grid-column:1; grid-row:1;">
+          <strong>olist_customers_dataset</strong><br>客户维度
+        </div>
+        <div class="arrow" style="grid-column:2; grid-row:1;">→</div>
+        <div class="node blue" style="grid-column:3; grid-row:1;">
+          <strong>olist_orders_dataset</strong><br>订单主表
+        </div>
+        <div class="arrow" style="grid-column:4; grid-row:1;">→</div>
+        <div class="node blue" style="grid-column:5; grid-row:1;">
+          <strong>olist_order_payments_dataset</strong><br>支付明细
+        </div>
+        <div style="grid-column:6; grid-row:1;"></div>
+        <div style="grid-column:7; grid-row:1;"></div>
+
+        <div style="grid-column:3; grid-row:2;" class="down">↓</div>
+        <div style="grid-column:5; grid-row:2;"></div>
+
+        <div class="node blue" style="grid-column:3; grid-row:3;">
+          <strong>olist_order_items_dataset</strong><br>订单商品明细
+        </div>
+        <div class="arrow" style="grid-column:4; grid-row:3;">→</div>
+        <div class="node pink" style="grid-column:5; grid-row:3;">
+          <strong>olist_order_reviews_dataset</strong><br>订单评价
+        </div>
+        <div class="arrow" style="grid-column:2; grid-row:3;">←</div>
+        <div class="node green" style="grid-column:1; grid-row:3;">
+          <strong>olist_sellers_dataset</strong><br>卖家维度
+        </div>
+        <div class="arrow" style="grid-column:6; grid-row:3;">→</div>
+        <div class="node green" style="grid-column:7; grid-row:3;">
+          <strong>olist_products_dataset</strong><br>商品维度
+        </div>
+
+        <div style="grid-column:7; grid-row:4;" class="down">↓</div>
+
+        <div class="node yellow" style="grid-column:7; grid-row:5;">
+          <strong>product_category_name_translation</strong><br>品类翻译表
+        </div>
+      </div>
+      <p class="legend">读图方式：<code>orders</code> 在中心；<code>items / payments / reviews</code> 围绕 <code>order_id</code>；<code>products / sellers</code> 通过 <code>order_items</code> 接入；<code>translation</code> 再补品类可读性。</p>
+    </div>
+
+    <h2>三、11 张表的作用卡片</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>表名</th>
+          <th>分组</th>
+          <th>作用</th>
+          <th>候选主键</th>
+          <th>核心连接</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>olist_orders_dataset</code></td>
+          <td>A 主链</td>
+          <td>订单主表，记录订单状态和关键时间。</td>
+          <td>order_id
+          <td><code>costomer_id</code>、<code>costomers</code>、<code>order_id</code>、tems/payments/reviews</td>
+          <td>字段类型：已修复；关键空值：
+        </tr>
+        <tr>
+          <td><code>olist_order_items_dataset</code></td>
+          <td>A 主链</td>
+          <td>订单商品明细，一单可多行，是最容易导致重复计算的表。</td>
+          <td><code>order_id</code>、<code>order_item_id</code>、<code>product_id</code>、<code>seller_id</code>、<code>price</code>、<code>freight_value</code></td>
+        </tr>
+        <tr>
+          <td><code>olist_order_payments_dataset</code></td>
+          <td>A 主链</td>
+          <td>支付方式、分期数、支付金额。</td>
+          <td><code>order_id</code>、<code>payment_type</code>、<code>payment_installments</code>、<code>payment_value</code></td>
+        </tr>
+        <tr>
+          <td><code>olist_order_reviews_dataset</code></td>
+          <td>A 主链</td>
+          <td>订单评价与评分。</td>
+          <td><code>order_id</code>、<code>review_score</code>、评论时间相关字段</td>
+        </tr>
+        <tr>
+          <td><code>olist_customers_dataset</code></td>
+          <td>A 主链</td>
+          <td>客户身份与地区信息。</td>
+          <td><code>customer_id</code>、<code>customer_unique_id</code>、<code>customer_city</code>、<code>customer_state</code></td>
+        </tr>
+        <tr>
+          <td><code>olist_products_dataset</code></td>
+          <td>A 主链</td>
+          <td>商品属性与品类。</td>
+          <td><code>product_id</code>、<code>product_category_name</code>、重量体积类字段</td>
+        </tr>
+        <tr>
+          <td><code>olist_sellers_dataset</code></td>
+          <td>A 主链</td>
+          <td>卖家信息与地区。</td>
+          <td><code>seller_id</code>、<code>seller_city</code>、<code>seller_state</code></td>
+        </tr>
+        <tr>
+          <td><code>product_category_name_translation</code></td>
+          <td>B 辅助</td>
+          <td>商品品类翻译映射。</td>
+          <td><code>product_category_name</code>、<code>product_category_name_english</code></td>
+        </tr>
+        <tr>
+          <td><code>olist_geolocation_dataset</code></td>
+          <td>B 辅助</td>
+          <td>邮编前缀与经纬度 / 城市 / 州映射。</td>
+          <td><code>geolocation_zip_code_prefix</code>、<code>geolocation_lat</code>、<code>geolocation_lng</code></td>
+        </tr>
+        <tr>
+          <td><code>olist_marketing_qualified_leads_dataset</code></td>
+          <td>C 扩展</td>
+          <td>营销线索表，描述潜在客户进入漏斗的阶段。</td>
+          <td><code>mql_id</code>、线索来源、创建时间等字段</td>
+        </tr>
+        <tr>
+          <td><code>olist_closed_deals_dataset</code></td>
+          <td>C 扩展</td>
+          <td>成交线索 / 成交单，描述漏斗中的成交结果。</td>
+          <td><code>mql_id</code>、<code>seller_id</code>、成交时间相关字段</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>四、核心连接关系</h2>
+    <div class="connections">
+      <div class="conn">orders.order_id → order_items.order_id</div>
+      <div class="conn">orders.order_id → order_payments.order_id</div>
+      <div class="conn">orders.order_id → order_reviews.order_id</div>
+      <div class="conn">orders.customer_id → customers.customer_id</div>
+      <div class="conn">order_items.product_id → products.product_id</div>
+      <div class="conn">order_items.seller_id → sellers.seller_id</div>
+      <div class="conn">products.product_category_name → product_category_name_translation.product_category_name</div>
+      <div class="conn">customers / sellers 的 zip_code_prefix → geolocation.geolocation_zip_code_prefix</div>
+    </div>
+
+    <h2 style="margin-top: 30px;">五、使用建议</h2>
+    <div class="card">
+      <p>先只掌握 A 组，再补 B 组，最后再看 C 组。不要一开始就盯所有 column。</p>
+      <p>更好的做法是先抓三类字段：<strong>连接列</strong>、<strong>指标列</strong>、<strong>补充解释列</strong>。</p>
+      <p>后续你可以把每张表的详细 column 继续补到这个 HTML 里，做成可展开的数据地图第二版。</p>
+    </div>
+  </div>
+</body>
+</html>
