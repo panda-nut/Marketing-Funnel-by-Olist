@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Olist Import",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_import_olist_to_mysql.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
