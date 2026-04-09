@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>business_findings</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --paper: rgba(255, 255, 255, 0.92);
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --line: #dfd4c5;
+      --accent: #b45309;
+      --accent-soft: #fff4e6;
+      --code-bg: #fbf7f1;
+      --shadow: 0 22px 70px rgba(86, 63, 36, 0.14);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 48px 20px;
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+      line-height: 1.8;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.78), transparent 32%),
+        linear-gradient(180deg, #f7f2ea 0%, var(--bg) 100%);
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 44px 52px;
+      background: var(--paper);
+      border: 1px solid rgba(223, 212, 197, 0.9);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    h1, h2, h3 {
+      line-height: 1.3;
+      margin-top: 1.7em;
+      margin-bottom: 0.7em;
+      color: #1b1b1b;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 16px;
+      font-size: 2rem;
+      border-bottom: 2px solid var(--line);
+      letter-spacing: 0.01em;
+    }
+    h2 {
+      font-size: 1.45rem;
+      padding-left: 14px;
+      border-left: 5px solid var(--accent);
+    }
+    h3 {
+      font-size: 1.15rem;
+    }
+    p {
+      margin: 0.85em 0;
+    }
+    strong {
+      color: #111827;
+    }
+    ul, ol {
+      margin: 0.85em 0 1.1em;
+      padding-left: 1.45em;
+    }
+    li {
+      margin: 0.4em 0;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(180, 83, 9, 0.25);
+    }
+    a:hover {
+      border-bottom-color: var(--accent);
+    }
+    pre, .codehilite {
+      background: var(--code-bg);
+      padding: 16px 18px;
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid #eadfce;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    code {
+      padding: 0.15em 0.4em;
+      background: var(--accent-soft);
+      border-radius: 6px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+    pre code, .codehilite code {
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+    }
+    blockquote {
+      margin: 1.2em 0;
+      padding: 0.8em 1em;
+      color: var(--muted);
+      background: #fffaf3;
+      border-left: 4px solid #d6b58b;
+      border-radius: 0 12px 12px 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1.2em 0;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #fffdfa;
+      border: 1px solid #eadfce;
+    }
+    th, td {
+      border: 1px solid #eee4d8;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background: #f8eedf;
+      color: #5b3a12;
+    }
+    hr {
+      border: none;
+      height: 1px;
+      margin: 2em 0;
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+    }
+    ::selection {
+      background: #fde2b6;
+    }
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 12px;
+      }
+      main {
+        padding: 28px 20px;
+        border-radius: 18px;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      main {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: #fff;
+      }
+      a {
+        color: inherit;
+        border-bottom: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+<h1 id="business_findings">business_findings</h1>
+<h2 id="1">1. 项目结论摘要</h2>
+<p>本项目基于 Olist 电商数据，对数据质量、月度 GMV、订单履约和品类表现进行了统一口径分析。整体看，平台在 <code>2017-01</code> 到 <code>2018-08</code> 期间完成了明显扩张，GMV增长的核心驱动是订单量和活跃买家数增长，而不是单客购买频次提升。与此同时，平台在业务高峰期出现了明显的履约承压现象，物流时效下滑会直接传导到差评率上升和评分下降。</p>
+<h2 id="2">2. 核心发现</h2>
+<h3 id="1-gmv-1542m">发现 1：平台已形成稳定规模，主体经营期总 GMV 达到 15.42M</h3>
+<ul>
+<li>delivered 口径下，累计 GMV 为 <code>15,422,461.77</code>，累计已交付订单 <code>96,477</code> 单。</li>
+<li>主体经营区间 <code>2017-01</code> 到 <code>2018-08</code> 的平均月 GMV 为 <code>768,793.77</code>。</li>
+<li>月度峰值出现在 <code>2017-11</code>，GMV 达到 <code>1,153,528.05</code>。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>平台已经不是冷启动阶段，而是进入了可持续经营和结构优化阶段。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li>后续经营分析应从“有没有增长”转向“增长质量是否健康”。</li>
+</ul>
+<h3 id="2gmv">发现 2：GMV 增长主要来自新增订单和新增买家，而不是复购提升</h3>
+<ul>
+<li><code>orders_per_buyer</code> 长期稳定在 <code>1.01~1.02</code>。</li>
+<li><code>2017-11</code> GMV 环比增加 <code>402,387.78</code>，同时订单数增加 <code>2,811</code>，活跃买家增加 <code>2,766</code>，但客单价反而下降 <code>9.48</code>。</li>
+<li><code>2017-05</code>、<code>2018-01</code> 等增长月份也呈现相同特征。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>平台增长更依赖拉新和订单扩张，复购贡献相对有限。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li>下一阶段应补做用户分层和复购分析，判断增长是否具有留存支撑。</li>
+</ul>
+<h3 id="3">发现 3：高峰期履约承压明显，时效恶化会直接拉低客户评价</h3>
+<ul>
+<li><code>2017-11</code> 延迟率达到 <code>14.31%</code>，平均评分降到 <code>3.99</code>。</li>
+<li><code>2018-02</code> 延迟率 <code>15.99%</code>，平均评分 <code>3.88</code>。</li>
+<li><code>2018-03</code> 延迟率进一步升至 <code>21.36%</code>，平均评分跌到全周期最低的 <code>3.81</code>，差评率达到 <code>21.19%</code>。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>订单量高峰会压缩仓配和末端物流能力，用户体验恶化后会直接反映到评价体系中。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li>大促期前应提前做运力、库存和承诺时效的容量规划。</li>
+<li>需要单独复盘 <code>2017-11</code>、<code>2018-02</code>、<code>2018-03</code> 这三个阶段的物流节点。</li>
+</ul>
+<h3 id="4-2018">发现 4：物流体验在 2018 年中明显修复，口碑同步恢复</h3>
+<ul>
+<li><code>2018-06</code> 平均总交付时长缩短到 <code>8.77</code> 天，延迟率仅 <code>1.36%</code>。</li>
+<li><code>2018-06</code> 到 <code>2018-08</code> 的平均评分恢复到 <code>4.31+</code>，差评率回落到 <code>10%</code> 左右。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>履约质量改善能够直接带动客户满意度修复。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li>复用 <code>2018-06</code> 之后的履约策略，沉淀成高峰期标准动作。</li>
+</ul>
+<h3 id="5-5-3926-gmv">发现 5：头部类目集中度较高，前 5 大类目贡献约 39.26% GMV</h3>
+<ul>
+<li>Top 5 类目依次为 <code>health_beauty</code>、<code>watches_gifts</code>、<code>bed_bath_table</code>、<code>sports_leisure</code>、<code>computers_accessories</code>。</li>
+<li>其中 <code>health_beauty</code> 的类目 GMV 为 <code>1,412,038.44</code>，<code>bed_bath_table</code> 为 <code>1,225,747.63</code>，<code>computers_accessories</code> 为 <code>1,032,840.48</code>。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>平台收入高度依赖头部类目，结构上存在一定集中度。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li>头部类目应作为日常经营监控主战场，重点跟踪履约、评价和退款表现。</li>
+</ul>
+<h3 id="6">发现 6：类目问题主要体现在交付后体验，而不是交付前取消</h3>
+<ul>
+<li><code>office_furniture</code> 平均评分只有 <code>3.64</code>，差评率 <code>21.95%</code>，但取消率仅 <code>0.08%</code>。</li>
+<li><code>bed_bath_table</code> 订单量 <code>9,272</code>，差评率 <code>16.04%</code>。</li>
+<li><code>computers_accessories</code> 订单量 <code>6,530</code>，差评率 <code>14.56%</code>。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>某些类目的问题不是下单前流失，而是商品质量、包装、安装复杂度、运输破损或预期差导致的售后体验问题。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li><code>office_furniture</code> 需要优先排查破损率、安装难度、描述一致性。</li>
+<li><code>bed_bath_table</code> 和 <code>computers_accessories</code> 需要做高频差评词和售后原因的专项分析。</li>
+</ul>
+<h3 id="7">发现 7：品类映射缺失已经影响分析精度</h3>
+<ul>
+<li><code>unknown</code> 类目订单数达到 <code>1,392</code>，差评率 <code>17.51%</code>，取消率 <code>0.96%</code>。</li>
+<li>该类目既无法归属到明确经营线，又在风险指标上偏高。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>品类映射缺失会削弱经营归因、类目优化和报表解释能力。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li>优先补齐 <code>product_category_name_translation</code> 映射，清理 <code>unknown</code> 商品。</li>
+</ul>
+<h3 id="8">发现 8：整体数据质量可支撑经营分析，但存在少量金额异常订单</h3>
+<ul>
+<li><code>order_items</code> 与 <code>payments</code> 之间共有 <code>303</code> 单金额不一致，占比 <code>0.3071%</code>。</li>
+<li>平均差额为 <code>-9.48</code>，极值范围在 <code>-182.81</code> 到 <code>51.62</code> 之间。</li>
+</ul>
+<p>业务解释：</p>
+<ul>
+<li>该异常规模较小，不影响大盘结论，但在精细化财务口径分析中需要单独处理。</li>
+</ul>
+<p>建议动作：</p>
+<ul>
+<li>将异常订单作为后续补充专题，排查分期支付、补差和退款等情形。</li>
+</ul>
+<h2 id="3_1">3. 最终业务判断</h2>
+<p>这是一个“规模已起来，但体验波动会伤害增长质量”的平台。</p>
+<ul>
+<li>规模层面：平台已具备稳定月 GMV 能力。</li>
+<li>增长层面：增长仍以拉新和订单扩张为主，复购贡献有限。</li>
+<li>运营层面：高峰期履约是最关键的经营短板。</li>
+<li>商品层面：头部类目贡献高，但部分高体量类目体验表现一般。</li>
+</ul>
+<p>因此，最合理的经营优先级是：</p>
+<ol>
+<li>先保履约稳定，尤其是大促和高峰月份。</li>
+<li>再抓高体量问题类目，优先是 <code>bed_bath_table</code>、<code>computers_accessories</code>、<code>furniture_decor</code>、<code>office_furniture</code>。</li>
+<li>最后补用户复购和用户分层，验证增长是否可持续。</li>
+</ol>
+<h2 id="4">4. 仍可继续补充的数据</h2>
+<p>当前已经足够完成一版完整业务报告，不需要额外数据也能交付。</p>
+<p>如果要继续升级项目，最值得补的不是更多基础 SQL，而是以下三类数据或分析：</p>
+<ul>
+<li>用户复购数据：做新老客、复购率、RFM 分层</li>
+<li>地区数据：做州/城市维度的物流和需求差异分析</li>
+<li>评论文本数据：做差评原因归类，验证履约、包装、商品质量的真实问题来源</li>
+</ul>
+  </main>
+</body>
+</html>

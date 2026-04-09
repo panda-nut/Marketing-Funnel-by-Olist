@@ -4,7 +4,8 @@ import sys
 from pathlib import Path
 
 
-DEFAULT_INPUT = Path("python导入SQL面经.md")
+BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_INPUT = BASE_DIR / "olist_project" / "NOTES" / "business_findings.md"
 
 
 def build_html_document(title: str, body_html: str) -> str:
@@ -209,8 +210,17 @@ def convert_markdown_to_html(input_path: Path, output_path: Path) -> None:
 
 
 def main() -> None:
-    input_path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_INPUT
-    output_path = Path(sys.argv[2]) if len(sys.argv) > 2 else input_path.with_suffix(".html")
+    input_path = Path(sys.argv[1]).expanduser() if len(sys.argv) > 1 else DEFAULT_INPUT
+    if not input_path.is_absolute():
+        input_path = (Path.cwd() / input_path).resolve()
+
+    output_path = (
+        Path(sys.argv[2]).expanduser()
+        if len(sys.argv) > 2
+        else input_path.with_suffix(".html")
+    )
+    if not output_path.is_absolute():
+        output_path = (Path.cwd() / output_path).resolve()
 
     if not input_path.exists():
         raise SystemExit(f"找不到 Markdown 文件: {input_path}")
